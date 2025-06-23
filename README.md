@@ -30,9 +30,16 @@ Favorite Devices
 Favorite OS
 -----------
 
-- [Raspberry Pi OS (64-bit)](https://www.raspberrypi.com/software/operating-systems/)
+- [Raspberry Pi OS (64-bit)](https://www.raspberrypi.com/software/operating-systems/):
+  The traditional desktop version of the Raspberry Pi OS. Primary interesting
+  for [Raspberry Pi 500](https://www.raspberrypi.com/products/raspberry-pi-500/) and
+  for [Raspberry Pi 5](https://www.raspberrypi.com/products/raspberry-pi-5/).
 
 - [Raspberry Pi OS Lite (64-bit)](https://www.raspberrypi.com/software/operating-systems/)
+  A reduced
+  server version of the Raspberry Pi OS. Primary interesting
+  for [Raspberry Pi 5](https://www.raspberrypi.com/products/raspberry-pi-5/)
+  and [Raspberry Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-5/).
 
 Setup Level 0
 -------------
