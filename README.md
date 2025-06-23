@@ -94,7 +94,7 @@ Setup Level 1
     sudo apt install -y bash tmux vim git make
     ```
 
-- ***OPTIONALLY***: Install the latest Node.js 24 version:
+- **OPTIONALLY**: Install the latest Node.js 24 version:
 
     ```
     curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
