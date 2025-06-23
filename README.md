@@ -142,6 +142,13 @@ Setup Level 1
 Setup Level 2
 -------------
 
+Before any further installations, enter the writable filesystem with:
+
+```
+sudo overlayfs-chroot
+sudo -u studio bash
+```
+
 - **EXAMPLE**: Install the latest Node.js 24 version:
 
     ```
@@ -181,4 +188,12 @@ Setup Level 2
     ```
     sudo satellite-update
     ```
+
+After any installations, exit the writable filesystem with:
+
+```
+exit
+exit
+sudo reboot
+```
 
