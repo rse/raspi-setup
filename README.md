@@ -71,6 +71,12 @@ Setup Level 0
     sudo rpi-update
     ```
 
+- Finally, reboot the device:
+
+    ```
+    sudo reboot
+    ```
+
 Setup Level 1
 -------------
 
@@ -110,7 +116,6 @@ Setup Level 1
     ```
     sudo raspi-config nonint do_boot_wait 0
     sudo raspi-config nonint do_boot_behaviour B1
-    sudo reboot
     ```
 
 - Configure WLAN access:
@@ -119,7 +124,6 @@ Setup Level 1
     sudo nmcli radio wifi on
     sudo raspi-config nonint do_wifi_country "<cc>"
     sudo raspi-config nonint do_wifi_ssid_passphrase "<ssid>" "<passphrase>"
-    sudo reboot
     ```
 
 - Configure fixed IP addresses on network interface:
@@ -145,6 +149,11 @@ Setup Level 1
     chmod 755 /usr/sbin/overlayfs-chroot
     sudo raspi-config nonint enable_overlayfs
     sudo raspi-config nonint enable_bootro
+    ```
+
+- Finally, reboot the device:
+
+    ```
     sudo reboot
     ```
 
