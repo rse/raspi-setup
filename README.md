@@ -15,6 +15,8 @@ Favorite Devices
   and has microSD slot, 2 USB ports, 2.4/5.0 GHz Wi-Fi, Bluetooth 4.2+BLE, HDMI and Ethernet.
   Can be purchased as an all-in-one product as
   [GeeekPi Raspberry Pi 5 Starter Kit](https://www.amazon.de/dp/B0CSBVH8K9).
+  Purchase a Class 1 (A1) and at least speed class C10 microSD card like
+  [SanDisk Extreme Pro](https://www.amazon.de/dp/B09X7BYSFG).
 
 - [Raspberry Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-5/):
   The smallest traditional Raspberry Pi, available in version 2 since 2021.
@@ -22,6 +24,8 @@ Favorite Devices
   SDRAM, and has microSD slot, 2 USB ports, 2.4 GHz Wi-Fi, Bluetooth 4.2+BLE, and Mini-HDMI.
   Can be purchased as an all-in-one product as
   [GeeekPi Raspberry Pi Zero 2 W Starter Kit](https://www.amazon.de/dp/B0BHS3NG4B).
+  Purchase a Class 1 (A1) and at least speed class C10 microSD card like
+  [SanDisk Extreme Pro](https://www.amazon.de/dp/B09X7BYSFG).
 
 Favorite OS
 -----------
