@@ -13,7 +13,6 @@
 ##  (2) and ensures that /dev/pts is available for "sudo"
 ##
 
-set -e
 set -f
 
 error() {
@@ -103,8 +102,10 @@ done
 
 info "Entering writable chroot environment [${lowerdir}]"
 chroot ${lowerdir} "$@"
+rc="$?"
 info "Leaving writable chroot environment [${lowerdir}]"
 
 clean_exit "${mounts}" "return"
 trap "" EXIT HUP INT QUIT TERM
+exit $rc
 
