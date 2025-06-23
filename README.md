@@ -114,7 +114,7 @@ Setup Level 1
 - Configure system for non-network booting into console mode:
 
     ```
-    sudo raspi-config nonint do_boot_wait 0
+    sudo raspi-config nonint do_boot_order B1
     sudo raspi-config nonint do_boot_behaviour B1
     ```
 
