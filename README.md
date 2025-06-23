@@ -145,7 +145,7 @@ Setup Level 1
 - Configure system for read-only operation:
 
     ```
-    curl -o /usr/sbin/overlayfs-chroot https://github.com/rse/raspi-setup/raw/refs/heads/master/overlayfs-chroot
+    curl -sL -o /usr/sbin/overlayfs-chroot https://github.com/rse/raspi-setup/raw/refs/heads/master/overlayfs-chroot
     chmod 755 /usr/sbin/overlayfs-chroot
     sudo raspi-config nonint enable_overlayfs
     sudo raspi-config nonint enable_bootro
@@ -189,7 +189,7 @@ sudo -u studio bash
 - **EXAMPLE**: Install the Bitfocus Companion Sattelite service:
 
     ```
-    curl https://raw.githubusercontent.com/bitfocus/companion-satellite/main/pi-image/install.sh | bash
+    curl -sL https://raw.githubusercontent.com/bitfocus/companion-satellite/main/pi-image/install.sh | bash
     ```
 
     You can later upgrade to the latest version at any time with:
