@@ -1,0 +1,110 @@
+#!/bin/bash
+##
+##  overlayfs-chroot -- Enter a writable chroot(2) environment
+##
+##  Copyright (c) 2012 Dustin Kirkland <kirkland@ubuntu.com>
+##  Copyright (c) 2025 Dr. Ralf S. Engelschall <rse@engelschall.com>
+##  Licensed under GPL 3.0 <https://spdx.org/licenses/GPL-3.0>
+##
+##  This is a fork of the original overlayroot-chroot(1) script as of
+##  2025-06-22 from Raspberry Pi OS. The main changes to support a
+##  better user experience are:
+##  (1) it also makes a writable /boot/firmware available for "apt get upgrade"
+##  (2) and ensures that /dev/pts is available for "sudo"
+##
+
+set -e
+set -f
+
+error() {
+    printf "overlayfs-chroot: ERROR: $@\n" 1>&2
+}
+
+fail() {
+    [ $# -eq 0 ] || error "$@"
+    exit 1
+}
+
+info() {
+    printf "overlayfs-chroot: INFO: $@\n" 1>&2
+}
+
+get_lowerdir() {
+    local overlay=""
+    overlay=$(awk '$1 == "overlayroot" && $2 == "/" { print $0 }' /proc/mounts)
+    if [ -n "${overlay}" ]; then
+        lowerdir=${overlay##*lowerdir=}
+        lowerdir=${lowerdir%%,*}
+        if mountpoint "${lowerdir}" >/dev/null; then
+            _RET="${lowerdir}"
+        else
+            fail "Unable to find the overlayroot lowerdir"
+        fi
+    else
+        fail "Unable to find an overlayroot filesystem"
+    fi
+}
+
+get_bootro_now() {
+  findmnt /boot/firmware | grep -q " ro,"
+  echo $?
+}
+
+REMOUNTS=""
+BOOTRO=no
+
+clean_exit() {
+    local mounts="$1" rc=0 d="" lowerdir="" mp=""
+    mounts=`echo "$mounts" | awk '{ for (i=NF; i>1; i--) printf("%s ",$i); print $1 }'`
+    for d in ${mounts}; do
+        if mountpoint ${d} >/dev/null; then
+            umount ${d} || rc=1
+        fi
+    done
+    for mp in $REMOUNTS; do
+        mount -o remount,ro "${mp}" ||
+            error "Note that [${mp}] is still mounted read/write"
+    done
+    if [ "$BOOTRO" = "yes" ] ; then
+        if ! mount -o remount,ro /boot/firmware 2>/dev/null; then
+            error "Unable to re-mount boot partition /boot/firmware as read-only"
+        fi
+    fi
+    [ "$2" = "return" ] && return ${rc} || exit ${rc}
+}
+
+get_lowerdir
+lowerdir=${_RET}
+
+if [ $(get_bootro_now) -eq 0 ] ; then
+    if ! mount -o remount,rw /boot/firmware 2>/dev/null; then
+        error "Unable to mount boot partition /boot/firmware as writable"
+    fi
+    BOOTRO=yes
+fi
+
+recurse_mps=$(awk '$1 ~ /^\/dev\// && $2 ~ starts { print $2 }' \
+    starts="^$lowerdir/" /proc/mounts)
+
+mounts=""
+for d in dev dev/pts boot/firmware proc run sys; do
+    if ! mountpoint "${lowerdir}/${d}" >/dev/null; then
+        mount -o bind "/${d}" "${lowerdir}/${d}" || fail "Unable to bind /${d}"
+        mounts="$mounts $lowerdir/$d"
+        trap "clean_exit \"${mounts}\" || true" EXIT HUP INT QUIT TERM
+    fi
+done
+
+for mp in "$lowerdir" $recurse_mps; do
+    mount -o remount,rw "${mp}" &&
+        REMOUNTS="$mp $REMOUNTS" ||
+        fail "Unable to remount [$mp] writable"
+done
+
+info "Entering writable chroot environment [${lowerdir}]"
+chroot ${lowerdir} "$@"
+info "Leaving writable chroot environment [${lowerdir}]"
+
+clean_exit "${mounts}" "return"
+trap "" EXIT HUP INT QUIT TERM
+
