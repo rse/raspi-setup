@@ -147,6 +147,7 @@ Setup Level 1
     ```
     curl -fsSL -o /usr/sbin/overlayfs-chroot https://github.com/rse/raspi-setup/raw/refs/heads/master/overlayfs-chroot
     chmod 755 /usr/sbin/overlayfs-chroot
+    rm -f /etc/update-motd.d/97-overlayroot
     sudo raspi-config nonint enable_overlayfs
     sudo raspi-config nonint enable_bootro
     ```
