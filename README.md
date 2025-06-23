@@ -1,17 +1,48 @@
 
 Raspberry Pi Setup
-------------------
+==================
 
-- Purchase a [Raspberry Pi](https://www.raspberrypi.com/) (most easily with an all-in-one kit
-  like the [GeeekPi Starter Kit für Raspberry Pi 5](https://www.amazon.de/dp/B0CSBVH8K9?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)) and
-  install "Raspberry Pi OS Lite" (based on Debian 12.10)
+This small repository collects the essential information from Dr.
+Ralf S. Engelschall for making setups based on the awesome [Raspberry
+Pi](https://www.raspberrypi.com/) mini-computing platform.
+
+Favorite Devices
+----------------
+
+- [Raspberry Pi 5](https://www.raspberrypi.com/products/raspberry-pi-5/):
+  The traditional Raspberry Pi, available in version 5 since 2023.
+  It is based on the 64-bit 2.4GHz ARMv8 quad-core Cortex-A76 CPU, 8GB SDRAM,
+  and has microSD slot, 2 USB ports, 2.4/5.0 GHz Wi-Fi, Bluetooth 4.2+BLE, HDMI and Ethernet.
+  Can be purchased as an all-in-one product as
+  [GeeekPi Raspberry Pi 5 Starter Kit](https://www.amazon.de/dp/B0CSBVH8K9).
+
+- [Raspberry Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-5/):
+  The smallest traditional Raspberry Pi, available in version 2 since 2021.
+  It is based on the 64-bit 1.0GHz ARMv8 quad-core Cortex-A53 CPU, 512MB
+  SDRAM, and has microSD slot, 2 USB ports, 2.4 GHz Wi-Fi, Bluetooth 4.2+BLE, and Mini-HDMI.
+  Can be purchased as an all-in-one product as
+  [GeeekPi Raspberry Pi Zero 2 W Starter Kit](https://www.amazon.de/dp/B0BHS3NG4B).
+
+Favorite OS
+-----------
+
+- [Raspberry Pi OS (64-bit)](https://www.raspberrypi.com/software/operating-systems/)
+
+- [Raspberry Pi OS Lite (64-bit)](https://www.raspberrypi.com/software/operating-systems/)
+
+Setup Level 0
+-------------
+
+- Purchase a [Raspberry Pi](https://www.raspberrypi.com/) device
+  and install "Raspberry Pi OS" or "Raspbeery Pi OS Lite" (both based on Debian 12)
   as the operating system (OS) onto it with the
   official [Raspberry Pi OS Imager](https://www.raspberrypi.com/software/).
-  Pre-configure the Raspberry Pi OS with SSH access and a username/password
-  during the imaging process. Then connect the device to the
-  network, boot it and login with SSH.
+  Optimally, pre-configure the Raspberry Pi OS with SSH access and a
+  username/password during the imaging process. Then connect the device
+  to the network, boot it, let it get an IP with DHCP and then login
+  with SSH.
 
-- Upgrade the OS to latest Debian 12 version:
+- Upgrade to the latest OS state:
 
     ```
     sudo apt update
@@ -19,24 +50,20 @@ Raspberry Pi Setup
     sudo apt autoremove --purge
     ```
 
-- Install the essential tools:
+Setup Level 1
+-------------
 
-    ```
-    sudo apt install -y vim bash git make
-    ```
-
-- Optionally upgrade the Raspberry Pi 5 firmware to the latest version.
-  But CAUTION, this can make you a lot of trouble as it manually installs
+- **OPTIONALLY** upgrade the Raspberry Pi firmware to the latest version.
+  But **CAUTION**, this can make you a lot of trouble as it manually installs
   the latest Linux kernel instead of using the package management and as a
   result it (as of 2025-06-22) at least breaks the initramfs and this way
   the overlayfs feature:
 
     ```
     sudo rpi-update
-    sudo reboot
     ```
 
-- Underclock the Raspberry Pi 5 to reduce power consumption and heat:
+- Raspberry Pi 5 only: underclock CPU to reduce power consumption and overall device heat:
 
     ```
     sudo vi /boot/firmware/config.txt
@@ -44,7 +71,13 @@ Raspberry Pi Setup
     | arm_freq=720
     ```
 
-- Reduce services of Raspberry Pi OS:
+- Install more essential tools:
+
+    ```
+    sudo apt install -y bash tmux vim git make
+    ```
+
+- **OPTIONALLY** reduce services of Raspberry Pi OS:
 
     ```
     sudo systemctl disable avahi-daemon
@@ -52,15 +85,59 @@ Raspberry Pi Setup
     sudo systemctl disable ModemManager
     ```
 
-- Install the latest Node.js 24 version:
+- Configure system for non-network booting into console mode:
+
+    ```
+    sudo raspi-config nonint do_boot_wait 0
+    sudo raspi-config nonint do_boot_behaviour B1
+    ```
+
+- **OPTIONALLY** configure WLAN access:
+
+    ```
+    sudo nmcli radio wifi on
+    sudo raspi-config nonint do_wifi_country "<cc>"
+    sudo raspi-config nonint do_wifi_ssid_passphrase "<ssid>" "<passphrase>"
+    ```
+
+- **OPTIONALLY** configure fixed IP addresses on Ethernet interface:
+
+    ```
+    sudo nmcli con mod "Wired connection 1" ipv4.addresses 10.0.0.100/24 \
+        ipv4.gateway 10.0.0.1 ipv4.dns 10.0.0.1 ipv4.method manual
+    sudo systemctl restart NetworkManager
+    ```
+
+    Notice: you can revert back to DHCP later with:
+
+    ```
+    sudo nmcli con mod "Wired connection 1" ipv4.method auto
+    sudo systemctl restart NetworkManager
+    ```
+
+- **OPTIONALLY** configure system for read-only operation:
+
+    ```
+    curl -o /usr/sbin/overlayfs-chroot https://github.com/rse/raspi-setup/raw/refs/heads/master/overlayfs-chroot
+    chmod 755 /usr/sbin/overlayfs-chroot
+    sudo raspi-config nonint enable_overlayfs
+    sudo raspi-config nonint enable_bootro
+    sudo reboot
+    ```
+
+Setup Level 2
+-------------
+
+- **EXAMPLE**: Install the latest Node.js 24 version:
 
     ```
     curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
     sudo bash nodesource_setup.sh
     sudo apt-get install nodejs -y
+    rm -f nodesource_setup.sh
     ```
 
-- Install the Busylight service:
+- **EXAMPLE**: Install the Busylight service:
 
     ```
     cd $HOME
@@ -71,41 +148,23 @@ Raspberry Pi Setup
     make start
     ```
 
-- Configure system for non-network booting into console mode:
+    You can later upgrade to the latest version at any time with:
 
     ```
-    sudo raspi-config nonint do_boot_wait 0
-    sudo raspi-config nonint do_boot_behaviour B1
+    cd $HOME
+    cd busylight
+    make upgrade
     ```
 
-- Optionally configure WLAN:
+- **EXAMPLE**: Install the Bitfocus Companion Sattelite service:
 
     ```
-    sudo nmcli radio wifi on
-    sudo raspi-config nonint do_wifi_country "<cc>"
-    sudo raspi-config nonint do_wifi_ssid_passphrase "<ssid>" "<passphrase>"
+    curl https://raw.githubusercontent.com/bitfocus/companion-satellite/main/pi-image/install.sh | bash
     ```
 
-- Optionally configure fixed IP addresses on Ethernet interface:
+    You can later upgrade to the latest version at any time with:
 
     ```
-    sudo nmcli con mod "Wired connection 1" ipv4.addresses 10.1.0.94/24 \
-        ipv4.gateway 10.1.0.1 ipv4.dns 10.1.0.1 ipv4.method manual
-    sudo systemctl restart NetworkManager
-    ```
-
-    You can revert back to DHCP later with:
-
-    ```
-    sudo nmcli con mod "Wired connection 1" ipv4.method auto
-    sudo systemctl restart NetworkManager
-    ```
-
-- Configure system for read-only operation:
-
-    ```
-    sudo raspi-config nonint enable_overlayfs
-    sudo raspi-config nonint enable_bootro
-    sudo reboot
+    sudo satellite-update
     ```
 
