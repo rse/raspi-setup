@@ -80,7 +80,7 @@ Setup Level 0
 Setup Level 1
 -------------
 
-- *OPTIONAL*: Raspberry Pi 5 only: underclock CPU to reduce power consumption and overall device heat:
+- **OPTIONALLY**: Raspberry Pi 5 only: underclock CPU to reduce power consumption and overall device heat:
 
     ```
     sudo vi /boot/firmware/config.txt
@@ -88,13 +88,13 @@ Setup Level 1
     | arm_freq=720
     ```
 
-- *OPTIONAL*: Install more essential tools:
+- **OPTIONALLY**: Install more essential tools:
 
     ```
     sudo apt install -y bash tmux vim git make
     ```
 
-- **OPTIONAL**: Install the latest Node.js 24 version:
+- ***OPTIONALLY***: Install the latest Node.js 24 version:
 
     ```
     curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
@@ -103,7 +103,7 @@ Setup Level 1
     rm -f nodesource_setup.sh
     ```
 
-- *OPTIONAL*: Reduce services of Raspberry Pi OS:
+- **OPTIONALLY**: Reduce services of Raspberry Pi OS:
 
     ```
     sudo systemctl disable avahi-daemon
@@ -118,7 +118,7 @@ Setup Level 1
     sudo raspi-config nonint do_boot_behaviour B1
     ```
 
-- *OPTIONAL*: Configure WLAN access:
+- **OPTIONALLY**: Configure WLAN access:
 
     ```
     sudo nmcli radio wifi on
@@ -126,7 +126,7 @@ Setup Level 1
     sudo raspi-config nonint do_wifi_ssid_passphrase "<ssid>" "<passphrase>"
     ```
 
-- *OPTIONAL*: Configure fixed IP addresses on network interface:
+- **OPTIONALLY**: Configure fixed IP addresses on network interface:
 
     ```
     sudo nmcli con list
