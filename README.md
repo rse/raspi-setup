@@ -61,9 +61,6 @@ Setup Level 0
     sudo apt autoremove --purge
     ```
 
-Setup Level 1
--------------
-
 - **OPTIONALLY** upgrade the Raspberry Pi firmware to the latest version.
   But **CAUTION**, this can make you a lot of trouble as it manually installs
   the latest Linux kernel instead of using the package management and as a
@@ -73,6 +70,9 @@ Setup Level 1
     ```
     sudo rpi-update
     ```
+
+Setup Level 1
+-------------
 
 - Raspberry Pi 5 only: underclock CPU to reduce power consumption and overall device heat:
 
