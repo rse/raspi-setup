@@ -142,6 +142,14 @@ Setup Level 1
     sudo systemctl restart NetworkManager
     ```
 
+- Disable swap:
+
+   ```
+   sudo dphys-swapfile swapoff && \
+   sudo dphys-swapfile uninstall && \
+   sudo update-rc.d dphys-swapfile remove
+   ```
+
 - Configure system for read-only operation:
 
     ```
