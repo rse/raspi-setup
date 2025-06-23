@@ -88,6 +88,15 @@ Setup Level 1
     sudo apt install -y bash tmux vim git make
     ```
 
+- **OPTIONAL**: Install the latest Node.js 24 version:
+
+    ```
+    curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
+    sudo bash nodesource_setup.sh
+    sudo apt-get install nodejs -y
+    rm -f nodesource_setup.sh
+    ```
+
 - Reduce services of Raspberry Pi OS:
 
     ```
@@ -148,15 +157,6 @@ Before any further installations, enter the writable filesystem with:
 sudo overlayfs-chroot
 sudo -u studio bash
 ```
-
-- **EXAMPLE**: Install the latest Node.js 24 version:
-
-    ```
-    curl -fsSL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh
-    sudo bash nodesource_setup.sh
-    sudo apt-get install nodejs -y
-    rm -f nodesource_setup.sh
-    ```
 
 - **EXAMPLE**: Install the Busylight service:
 
