@@ -88,7 +88,7 @@ Setup Level 1
     sudo apt install -y bash tmux vim git make
     ```
 
-- **OPTIONALLY** reduce services of Raspberry Pi OS:
+- Reduce services of Raspberry Pi OS:
 
     ```
     sudo systemctl disable avahi-daemon
@@ -101,20 +101,23 @@ Setup Level 1
     ```
     sudo raspi-config nonint do_boot_wait 0
     sudo raspi-config nonint do_boot_behaviour B1
+    sudo reboot
     ```
 
-- **OPTIONALLY** configure WLAN access:
+- Configure WLAN access:
 
     ```
     sudo nmcli radio wifi on
     sudo raspi-config nonint do_wifi_country "<cc>"
     sudo raspi-config nonint do_wifi_ssid_passphrase "<ssid>" "<passphrase>"
+    sudo reboot
     ```
 
-- **OPTIONALLY** configure fixed IP addresses on Ethernet interface:
+- Configure fixed IP addresses on network interface:
 
     ```
-    sudo nmcli con mod "Wired connection 1" ipv4.addresses 10.0.0.100/24 \
+    sudo nmcli con list
+    sudo nmcli con mod "<id>" ipv4.addresses 10.0.0.100/24 \
         ipv4.gateway 10.0.0.1 ipv4.dns 10.0.0.1 ipv4.method manual
     sudo systemctl restart NetworkManager
     ```
@@ -126,7 +129,7 @@ Setup Level 1
     sudo systemctl restart NetworkManager
     ```
 
-- **OPTIONALLY** configure system for read-only operation:
+- Configure system for read-only operation:
 
     ```
     curl -o /usr/sbin/overlayfs-chroot https://github.com/rse/raspi-setup/raw/refs/heads/master/overlayfs-chroot
