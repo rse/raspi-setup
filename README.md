@@ -145,9 +145,9 @@ Setup Level 1
 - Disable swap:
 
    ```
-   sudo dphys-swapfile swapoff && \
-   sudo dphys-swapfile uninstall && \
-   sudo update-rc.d dphys-swapfile remove
+   sudo dphys-swapfile swapoff
+   sudo dphys-swapfile uninstall
+   sudo systemctl disable dphys-swapfile.service
    ```
 
 - Configure system for read-only operation:
