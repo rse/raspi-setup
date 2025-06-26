@@ -86,7 +86,7 @@ recurse_mps=$(awk '$1 ~ /^\/dev\// && $2 ~ starts { print $2 }' \
     starts="^$lowerdir/" /proc/mounts)
 
 mounts=""
-for d in dev dev/pts boot/firmware proc run sys; do
+for d in dev dev/pts boot/firmware proc etc/resolv.conf run sys; do
     if ! mountpoint "${lowerdir}/${d}" >/dev/null; then
         mount -o bind "/${d}" "${lowerdir}/${d}" || fail "Unable to bind /${d}"
         mounts="$mounts $lowerdir/$d"
@@ -105,6 +105,7 @@ chroot ${lowerdir} "$@"
 rc="$?"
 info "Leaving writable chroot environment [${lowerdir}]"
 
+sleep 1
 clean_exit "${mounts}" "return"
 trap "" EXIT HUP INT QUIT TERM
 exit $rc
